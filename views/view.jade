@@ -1,0 +1,19 @@
+doctype html
+html
+include includes/header
+hr
+div(class='container', style='margin-top:51px')
+	div(class='row')
+		div(class='col-md-6')
+			button(class='btn btn-default', id='latest') Latest
+			hr
+			p(id='latestPost')
+		div(class='col-md-6')
+			button(class='btn btn-default', id='random') Random
+			hr
+			p(id='randomPost')
+	hr
+
+
+include includes/footer	
+script(src='/javascripts/loadPosts.js')

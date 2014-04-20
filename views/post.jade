@@ -1,0 +1,19 @@
+doctype html
+html
+include includes/header
+
+div(class='container', style='margin-top:51px')
+	h3 Post to the wall
+	form(role='form')
+		div(class='form-group')
+			textarea(class='form-control', rows='5', id='body')
+			br
+			div(class='row')
+				div(class='col-md-2')
+					h4 Nickname: 
+				div(class='col-md-4')
+					input(class='form-control', hint='Anonymous' id='showas')
+			button(class='btn btn-primary', type='button', id='postbtn') Post
+
+include includes/footer	
+script(src='/javascripts/post.js')
