@@ -1,5 +1,5 @@
 {
-  "name": "application-name",
+  "name": "Hiddenme",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -14,7 +14,10 @@
 	"passport-local": "*",
 	"connect-flash": "*",
 	"bcrypt-nodejs": "*",
-  "canvas": "*",
-  "captchagen": "*"
+  	"canvas": "git://github.com/elspoono/node-canvas-heroku.git",
+	"captchagen": "*"
+  },
+  "devDependencies":{
+	  "canvas":"*";
   }
 }
