@@ -13,6 +13,8 @@
 	"passport": "*",
 	"passport-local": "*",
 	"connect-flash": "*",
-	"bcrypt-nodejs": "*"
+	"bcrypt-nodejs": "*",
+  "canvas": "*",
+  "captchagen": "*"
   }
 }

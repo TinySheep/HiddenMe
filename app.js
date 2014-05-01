@@ -3,20 +3,23 @@
  * Module dependencies.
  */
 
+//Required modules
 var express = require('express');
-var routes = require('./routes');
-//var user = require('./routes/user');
-var post = require('./routes/post');
-var read = require('./routes/read');
+var flash = require('connect-flash');
+var captchagen = require('captchagen');
 var http = require('http');
 var path = require('path');
-var db = require('./routes/db');
 var passport = require('passport');
-var flash = require('connect-flash');
 
-require('./routes/passport')(passport)
+//Required vars
+var post = require('./routes/post');
+var read = require('./routes/read');
+var db = require('./controllers/db');
+var dbConfig = require('./models/dbConfig');
 
 var app = express();
+
+require('./controllers/passport')(passport)
 
 // all environments
 app.use(express.favicon());
@@ -26,9 +29,7 @@ app.use(express.methodOverride());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 app.configure(function(){
-
 	// required for passport
 	app.use(passport.initialize());
 	app.use(express.logger('dev'));
@@ -42,13 +43,13 @@ app.configure(function(){
 	app.use(app.router);
 });
 
-
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+//Connect to database
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017:test');
+mongoose.connect(dbConfig.url);
 var conn = mongoose.connection;
 conn.on('error', console.error.bind(console, 'Database connection error: '));
 conn.once('open', function(){
@@ -60,54 +61,9 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+//Require all get/post methods
+require('./routes/route')(app, passport, db, mongoose, captchagen);
 
-
-app.get('/', function(req, res){
-  res.render('index', {user : req.user});
-});
-app.get('/post', post.addPost);
-//app.get('/users', user.list);
-app.get('/view', read.getPosts);
-app.post('/addPost', db.savePost(mongoose));
-app.post('/randomposts', db.getRandomPosts(mongoose));
-app.post('/latestPosts', db.getLatestPosts(mongoose));
-
-//Authentication
-app.get('/login', function(req, res){
-	res.render('login', {message: req.flash('loginMsg')});
-})
-app.get('/register', function(req, res){
-	res.render('register', {message: req.flash('registerMsg')});
-})
-
-app.post('/login', passport.authenticate('login', {
-	successRedirect : '/', // redirect to the secure profile section
-	failureRedirect : '/login', // redirect back to the signup page if there is an error
-	failureFlash : true // allow flash messages
-}));
-
-
-app.post('/register', passport.authenticate('register', {
-	successRedirect : '/', // redirect to the secure profile section
-	failureRedirect : '/register', // redirect back to the signup page if there is an error
-	failureFlash : true // allow flash messages
-}));
-
-app.get('/logout', function(req, res) {
-	req.logout();
-	res.redirect('/');
-});
-
-function isLoggedIn(req, res, next) {
-
-	// if user is authenticated in the session, carry on 
-	if (req.isAuthenticated())
-		return next();
-
-	// if they aren't redirect them to the home page
-	//res.redirect('/');
-	return null;
-}
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

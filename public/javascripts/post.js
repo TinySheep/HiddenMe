@@ -1,5 +1,7 @@
+/*
 $('button#postbtn').click(function(){
-	alert('clicked');
+	var text = '#{text}';
+	alert(text);
 	var body = $('textarea#body').val();
 	var nickname = $('input#showas').val();
 	$.ajax({
@@ -18,3 +20,4 @@ $('button#postbtn').click(function(){
         }
 	});
 });
+*/

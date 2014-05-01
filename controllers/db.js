@@ -51,11 +51,11 @@ exports.savePost = function(mongoose){
 		newPost.save(function(err){
 			if(err){ 
 				console.error(err);
-				//res.status(500);
+				res.send(500);
 			}
 			else{
 				console.log('Saved');
-				//res.status(200);
+				res.send(200);
 			}
 		});
 

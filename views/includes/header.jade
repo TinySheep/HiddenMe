@@ -16,8 +16,9 @@ body
                     a(href='/view') View
             div(class="navbar-right")
                 if user
-                    p user.email
-                    a(href="/logout", type="submit", class="btn btn-danger")
+                    a(href="#") #{user.email}
+                    &nbsp
+                    a(href="/logout", type="submit", class="btn btn-danger") Logout
                 else
                     a(href="/login", type="submit", class="btn btn-success" ) Login
                     &nbsp

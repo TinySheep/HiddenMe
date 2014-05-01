@@ -2,7 +2,7 @@
 // load all the things we need
 var LocalStrategy = require('passport-local').Strategy;
 
-var User = require('./user');
+var User = require('../models/user');
 
 // expose this function to our app using module.exports
 module.exports = function(passport) {
@@ -28,10 +28,10 @@ module.exports = function(passport) {
         passReqToCallback : true // allows us to pass back the entire request to the callback
     },
     function(req, email, password, done) { // callback with email and password from our form
-
+        console.log("Authenticating: "+ email +"\n");
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
-        User.findOne({ 'local.email' :  email }, function(err, user) {
+        User.findOne({ 'email' :  email }, function(err, user) {
             // if there are any errors, return the error before anything else
             if (err)
                 return done(err);
@@ -42,8 +42,8 @@ module.exports = function(passport) {
 
             // if the user is found but the password is wrong
             if (!user.validPassword(password))
-                return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
-
+                return done(null, false, req.flash('loginMessage', 'Your password is wrong  .')); // create the loginMessage and save it to session as flashdata
+            console.log("Everything is vaild\n");
             // all is well, return successful user
             return done(null, user);
         });

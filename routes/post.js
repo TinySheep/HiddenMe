@@ -2,6 +2,9 @@
  * GET post comment page
  */
 
-exports.addPost = function(req, res) {
-	res.render("post");
+exports.addPost = function(User) {
+	return function(req, res){
+		console.log("test: "+User);
+		res.render("post", {user : User});
+	}
 };

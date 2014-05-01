@@ -3,17 +3,51 @@ html
 include includes/header
 
 div(class='container', style='margin-top:51px')
-	h3 Post to the wall
-	form(role='form')
-		div(class='form-group')
-			textarea(class='form-control', rows='5', id='body')
-			br
-			div(class='row')
-				div(class='col-md-2')
-					h4 Nickname: 
-				div(class='col-md-4')
-					input(class='form-control', hint='Anonymous' id='showas')
-			button(class='btn btn-primary', type='button', id='postbtn') Post
+    h3 Post to the wall
+    form(role='form')
+        div(class='form-group')
+            textarea(class='form-control', rows='5', id='body')
+            br
+            div(class='row')
+                div(class='col-md-2')
+                    h4 Nickname: 
+                div(class='col-md-4')
+                    input(class='form-control', hint='Anonymous',id='showas')
+            div(class='row')
+                div(class='col-md-3')
+                   h4 Please enter code(Case-sensitive): 
+                   input(class='form-control',id='captcha')
+                div(class='col-md-6')
+                    if img
+                        img(src="data:image/jpeg;base64,#{img}")
+            button(class='btn btn-primary', type='button', id='postbtn') Post
 
 include includes/footer	
-script(src='/javascripts/post.js')
+script(type='text/javascript').
+    var abcde = "text";
+    $('button#postbtn').click(function(){
+        var text = '#{text}';
+        var input = $('input#captcha').val().trim();
+        if(input != text){
+            alert("Please enter the correct code!");
+            return;
+        }
+        var body = $('textarea#body').val();
+        var nickname = $('input#showas').val();
+        $.ajax({
+            url: '/addPost',
+            type: 'post',
+            data: {
+                'nickname': nickname,
+                'body': body
+            }, 
+            success: function(data, text){
+                alert("Posted");
+                location.reload();
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                showResultFailed(jqXHR.responseText);
+                alert("Failed");
+            }
+        });
+    });
