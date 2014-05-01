@@ -20,6 +20,19 @@ module.exports = function(app, passport, db, mongoose, captchagen){
 		res.render('view', {user: currUser});
 	});
 
+	app.get('/donate', function(req, res){
+		res.render('donate', {user: currUser});
+	})
+
+	app.get('/contact', function(req, res){
+		var captcha = captchagen.create();
+		captcha.generate();
+		var text = captcha.text();
+		var buf = captcha.buffer('jpeg');
+		buf = new Buffer(buf, 'binary').toString('base64');
+		res.render('contact', {user: currUser, img: buf, text: text})
+	})
+
 	app.post('/addPost', db.savePost(mongoose));
 	app.post('/randomposts', db.getRandomPosts(mongoose));
 	app.post('/latestPosts', db.getLatestPosts(mongoose));
@@ -33,7 +46,6 @@ module.exports = function(app, passport, db, mongoose, captchagen){
 	})
 
 	app.post('/login', passport.authenticate('login', {
-		//successRedirect : '/', // redirect to the secure profile section
 		failureRedirect : '/login', // redirect back to the signup page if there is an error
 		failureFlash : true // allow flash messages
 	}), function(req, res){
@@ -43,10 +55,12 @@ module.exports = function(app, passport, db, mongoose, captchagen){
 
 
 	app.post('/register', passport.authenticate('register', {
-		successRedirect : '/', // redirect to the secure profile section
-		failureRedirect : '/register', // redirect back to the signup page if there is an error
+			failureRedirect : '/register', // redirect back to the signup page if there is an error
 		failureFlash : true // allow flash messages
-	}));
+	}), function(req, res){
+		currUser = req.user;
+		res.redirect('/');
+	});
 
 	app.get('/logout', function(req, res) {
 		currUser = null;

@@ -12,8 +12,6 @@ var path = require('path');
 var passport = require('passport');
 
 //Required vars
-var post = require('./routes/post');
-var read = require('./routes/read');
 var db = require('./controllers/db');
 var dbConfig = require('./models/dbConfig');
 

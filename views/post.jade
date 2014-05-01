@@ -42,8 +42,8 @@ script(type='text/javascript').
                 'body': body
             }, 
             success: function(data, text){
-                alert("Posted");
-                location.reload();
+                alert("Posted\nClick 'Latest' to view your post(s)!");
+                window.location.href='/view';
             },
             error: function(jqXHR, textStatus, errorThrown){
                 showResultFailed(jqXHR.responseText);
