@@ -1,4 +1,14 @@
 var nodemailer = require("nodemailer");
+var transport = nodemailer.createTransport("SMTP", {
+	service : "Gmail",
+	auth: {
+		XOAuthToken: nodemailer.createXOAuthGenerator({
+    		user: "robbenyang@gmail.com",
+    		token: "1/COdC_-MrGddfNpBHIqFMeUvX4QAsgAfX42c94E-qoYs",
+    		tokenSecret: "1fSpzujeknWNOxXmmDh4-_bD"
+		})
+	}
+})
 var currUser = null;
 
 module.exports = function(app, passport, db, mongoose, captchagen){
@@ -38,16 +48,7 @@ module.exports = function(app, passport, db, mongoose, captchagen){
 	app.post('/randomposts', db.getRandomPosts(mongoose));
 	app.post('/latestPosts', db.getLatestPosts(mongoose));
 	app.post('/comment', function(req, res){
-		var transport = nodemailer.createTransport("SMTP", {
-			service : "Gmail",
-			auth: {
-				XOAuthToken: nodemailer.createXOAuthGenerator({
-            		user: "robbenyang@gmail.com",
-            		token: "1/COdC_-MrGddfNpBHIqFMeUvX4QAsgAfX42c94E-qoYs",
-            		tokenSecret: "1fSpzujeknWNOxXmmDh4-_bD"
-        		})
-			}
-		})
+
 		console.log("comment request received.")
 		var data = req.body;
 		var realname = data['realname'];
