@@ -22,11 +22,11 @@ div(class='container', style='margin-top:51px')
                         h4 *Email (This is how I get back to you): 
                     div(class='col-md-4')
                         if user
-                            input(class='form-control', hint='Anonymous',id='useremail',value='#{user.email}')
+                            input(class='form-control',id='useremail',value='#{user.email}')
                         else
-                            input(class='form-control', hint='Anonymous',id='useremail')
+                            input(class='form-control',id='useremail')
                 div(class='row')
-                    textarea(class='form-control', rows='5', id='body')
+                    textarea(class='form-control', rows='5', id='body', hint=)
                 br
                 div(class='row')
                     div(class='col-md-3')
@@ -42,8 +42,7 @@ div(class='container', style='margin-top:51px')
 
 include includes/footer 
 script(type='text/javascript').
-    var abcde = "text";
-    $('button#postbtn').click(function(){
+    $('button#commentbtn').click(function(){
         var text = '#{text}';
         var input = $('input#captcha').val().trim();
         if(input != text){
@@ -51,21 +50,24 @@ script(type='text/javascript').
             return;
         }
         var body = $('textarea#body').val();
-        var nickname = $('input#showas').val();
+        var realname = $('input#realname').val();
+        var useremail = $('input#useremail').val();
+        //var 
         $.ajax({
-            url: '/addPost',
+            url: '/comment',
             type: 'post',
             data: {
-                'nickname': nickname,
+                'realname': realname,
+                'useremail': useremail,
                 'body': body
             }, 
             success: function(data, text){
-                alert("Posted\nClick 'Latest' to view your post(s)!");
-                window.location.href='/view';
+                alert("Thank you for your comment! We will get back to soon");
+                //window.location.href='/view';
             },
             error: function(jqXHR, textStatus, errorThrown){
                 showResultFailed(jqXHR.responseText);
-                alert("Failed");
+                alert("Failed to comment");
             }
         });
     });

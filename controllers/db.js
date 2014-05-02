@@ -1,4 +1,3 @@
-
 //Global variable
 var post;
 /*

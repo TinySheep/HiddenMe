@@ -62,7 +62,6 @@ if ('development' == app.get('env')) {
 //Require all get/post methods
 require('./routes/route')(app, passport, db, mongoose, captchagen);
 
-
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });

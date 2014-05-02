@@ -1,3 +1,4 @@
+var nodemailer = require("nodemailer");
 var currUser = null;
 
 module.exports = function(app, passport, db, mongoose, captchagen){
@@ -36,6 +37,40 @@ module.exports = function(app, passport, db, mongoose, captchagen){
 	app.post('/addPost', db.savePost(mongoose));
 	app.post('/randomposts', db.getRandomPosts(mongoose));
 	app.post('/latestPosts', db.getLatestPosts(mongoose));
+	app.post('/comment', function(req, res){
+		var transport = nodemailer.createTransport("SMTP", {
+			service : "Gmail",
+			auth: {
+				XOAuthToken: nodemailer.createXOAuthGenerator({
+            		user: "robbenyang@gmail.com",
+            		token: "1/COdC_-MrGddfNpBHIqFMeUvX4QAsgAfX42c94E-qoYs",
+            		tokenSecret: "1fSpzujeknWNOxXmmDh4-_bD"
+        		})
+			}
+		})
+		console.log("comment request received.")
+		var data = req.body;
+		var realname = data['realname'];
+		var body = data['body'];
+		var useremail = data['useremail'];
+		var emailbody = body + "\nFrom: "+ realname+ "\nFrom address:" + useremail;
+		var mailOptions = {
+			from: "robbenyang@gmail.com",
+			to: "robbenyang@gmail.com",
+			subject: "[HiddenMe]",
+			text: emailbody
+		}
+		transport.sendMail(mailOptions, function(err, respond){
+			if(err){
+				console.log(err);
+				res.send(500);
+			}
+			else{
+				console.log("Message successfully sent!");
+				res.send(200);
+			}
+		})
+	})
 
 	//Authentication
 	app.get('/login', function(req, res){
